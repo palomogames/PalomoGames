@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Juego de Dibujo</title>
+  <style>
+    body {
+      margin: 0;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: papayawhip;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    canvas {
+      border: 1px solid black;
+      border-radius: 5px;
+      touch-action: none; /* Evitar el scroll al dibujar en dispositivos táctiles */
+    }
+
+    .colors {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .color {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin: 5px;
+      cursor: pointer;
+      border: 1px solid #333;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgb(0, 0, 0);
+      color: white;
+      padding: 10px 20px;
+      height: 5%; /* Tamaño fijo de la barra de navegación */
+      font-family: Arial, sans-serif;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 200%;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+    #dibujo {
+      font-family: Arial, sans-serif;
+    }
+
+    #imagen-a-dibujar {
+      max-width: 100%;
+      max-height: 80vh; /* Altura máxima de la imagen */
+    }
+
+    #texto {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body style="background-color: pink; margin: 0;">
+    <div class="navbar" style="margin-bottom: 3%;">
+      <div><h1 style="font-size: 2em;"><a href="inicio.html" style="text-decoration: none; color: white;">PALOMOGAMES</a></h1></div>
+      <div style="font-size: 300%;">&#9776;</div> <!-- Ícono de menú (tres rayitas) -->
+    </div>
+    <div id="todo" style="display: none;">
+  <div id="container">
+    <h1>¡Dibuja la imagen!</h1>
+    <div class="colors">
+      <div class="color" style="background-color: black;" onclick="cambiarColor('black')"></div>
+      <div class="color" style="background-color: red;" onclick="cambiarColor('red')"></div>
+      <div class="color" style="background-color: blue;" onclick="cambiarColor('blue')"></div>
+      <div class="color" style="background-color: green;" onclick="cambiarColor('green')"></div>
+      <div class="color" style="background-color: yellow;" onclick="cambiarColor('yellow')"></div>
+      <div class="color" style="background-color: orange;" onclick="cambiarColor('orange')"></div>
+    </div>
+    <canvas id="canvas"></canvas>
+    <br>
+    <button onclick="compararDibujo()">GUARDAR DIBUJO</button>
+  </div>
+</div>
+<div id="dibujo">
+   <center> <div id="texto"><h1>Imagen a dibujar:</h1></div></center>
+   <center> <div id="texto"><h2>Recordala porque no la podes ver denuevo!</h2></div></center>
+
+   <center> <img id="imagen-a-dibujar" src="" alt="Imagen a dibujar"></center>
+   <center><button onclick="dibujar()">DIBUJAR!</button></center>
+  </div>
+
+  <script>
+          const imagenesADibujar = [
+            'dibujar1.jpg',
+            'dibujar2.jpg',
+            'dibujar3.jpg',
+        ];
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let dibujando = false;
+    let color = 'black';
+
+    canvas.width = window.innerWidth * 0.8; // El canvas ocupa el 80% del ancho de la ventana
+    canvas.height = window.innerHeight * 0.6; // El canvas ocupa el 60% del alto de la ventana
+
+    // Eventos de dibujo para dispositivos táctiles
+    canvas.addEventListener('touchstart', iniciarTrazo);
+    canvas.addEventListener('touchmove', dibujarTrazo);
+    canvas.addEventListener('touchend', () => dibujando = false);
+
+    // Eventos de dibujo para dispositivos con mouse
+    canvas.addEventListener('mousedown', iniciarTrazo);
+    canvas.addEventListener('mousemove', dibujarTrazo);
+    canvas.addEventListener('mouseup', () => dibujando = false);
+
+    function obtenerIndiceAleatorio() {
+            return Math.floor(Math.random() * imagenesADibujar.length);
+        }
+
+        function cambiarImagenADibujar() {
+            const indiceAleatorio = obtenerIndiceAleatorio();
+            const imagen = imagenesADibujar[indiceAleatorio];
+            const imagenADibujar = document.getElementById('imagen-a-dibujar');
+            imagenADibujar.src = imagen;
+        }
+        window.onload = function() {
+         cambiarImagenADibujar();   
+        }
+    function iniciarTrazo(e) {
+      dibujando = true;
+      const [posX, posY] = obtenerPosicion(e);
+      ctx.beginPath();
+      ctx.moveTo(posX, posY);
+    }
+
+    function dibujarTrazo(e) {
+      if (!dibujando) return;
+      const [posX, posY] = obtenerPosicion(e);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.lineTo(posX, posY);
+      ctx.stroke();
+    }
+
+    function obtenerPosicion(evento) {
+      const rect = canvas.getBoundingClientRect();
+      let posX, posY;
+      if (evento.touches) {
+        posX = evento.touches[0].clientX - rect.left;
+        posY = evento.touches[0].clientY - rect.top;
+      } else {
+        posX = evento.clientX - rect.left;
+        posY = evento.clientY - rect.top;
+      }
+      return [posX, posY];
+    }
+
+    function cambiarColor(newColor) {
+      color = newColor;
+    }
+
+    function compararDibujo() {
+      const imgData = canvas.toDataURL(); // Convertir el contenido del canvas a una imagen
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = 'taylorDibujo.png'; // Nombre del archivo descargable
+      link.click(); // Simular clic en el enlace para descargar la imagen
+      alert("TU IMAGEN ES UN: "+Math.floor(Math.random() * 10) + 1+"% igual a la foto" )
+      window.location.href="inicio.html"
+    }
+
+    // Redimensionar el canvas al cambiar el tamaño de la ventana
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth * 0.8;
+      canvas.height = window.innerHeight * 0.6;
+    });
+
+    function dibujar() {
+        document.getElementById("todo").style.display = "block";
+        document.getElementById("dibujo").style.display = "none";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+    "short_name": "PalomoGames",
+    "name": "PalomoGames",
+    "icons": [
+      {
+        "src": "logo.JPG",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "/inicio.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff"
+  }
+  

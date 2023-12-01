@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pregunta con botones</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <script src="scriptFacil.js"></script>
+  <div class="navbar">
+    <div><h1><a href="inicio.html" style="text-decoration: none; color: white;"> PALOMOGAMES</a></h1></div>
+    <div style="font-size: 300%;">&#9776;</div> <!-- Ícono de menú (tres rayitas) -->
+  </div>
+  <div class="container">
+
+    <div class="title">
+    <h1 id="puntaje" style="color: green;">0</h1>
+      
+      <h1>Adivina la canción</h1>
+    </div>
+    <progress value="100" max="100" id="miBarra"></progress>
+
+    <div class="question">
+      <h2 id="letraTXT">Letra: Can I go where you go?
+        Can we always be this close, forever and ever?</h2>
+    </div>
+    <div class="button-row">
+      <button onclick="respuestaClick('preguntaTXT1')" id="preguntaTXT1" type="button" style="background-color: rgb(245, 242, 49);" class="button">Opción 1</button>
+      <button onclick="respuestaClick('preguntaTXT2')"id="preguntaTXT2" type="button" style="background-color: rgb(49, 183, 245);" class="button">Opción 2</button>
+      <button onclick="respuestaClick('preguntaTXT3')"id="preguntaTXT3" type="button" style="background-color: rgb(245, 49, 196);" class="button">Opción 3</button>
+      <button onclick="respuestaClick('preguntaTXT4')"id="preguntaTXT4" type="button" style="background-color: rgb(233, 105, 0);" class="button">Opción 4</button>
+    </div>
+
+  </div>
+  <div  class="popup" id="miPopup">
+    <div  class="popup-content">
+     <center><H1 style="padding-bottom: 20%; font-size: 300%;">PERDISTE!</H1>
+      <H1 style="padding-bottom: 20%;" id="popupMensaje">PUNTAJE: 0</H1>
+   <button onclick="volverAMenu()" style="background-color: #0008ff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;font-size: 200%;margin-bottom: 10%; ">VOLVER AL MENU</button>
+   <button onclick="volverAJugar()" style="background-color:#0f944c ; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;font-size: 200%;">VOLVER A JUGAR</button></center>
+    </div>
+  </div>
+
+</body>
+</html>
